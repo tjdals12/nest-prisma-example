@@ -1,0 +1,33 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder", "omitApi"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  email String
+  name  String
+  posts Post[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime
+  updatedAt DateTime
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+model UserNick {
+  firstName String
+  lastName  String
+
+  @@unique([firstName, lastName])
+}
