@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["prismaSchemaFolder", "omitApi"]
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
@@ -8,26 +8,92 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int    @id @default(autoincrement())
-  email String
-  name  String
-  posts Post[]
+model departments {
+  dept_no   String     @id @db.Char(4)
+  dept_name String     @db.VarChar(40)
+  emp_count Int?
+  dept_emp  dept_emp[] @ignore
+
+  @@index([dept_name], map: "ux_deptname")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime
-  updatedAt DateTime
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    Int?
+model dept_emp {
+  emp_no    Int
+  dept_no   String   @db.Char(4)
+  from_date DateTime @db.Date
+  to_date   DateTime @db.Date
+
+  department departments @relation(fields: [dept_no], references: [dept_no])
+  employee   employees   @relation(fields: [emp_no], references: [emp_no])
+
+  @@id([dept_no, emp_no])
+  @@index([emp_no, from_date], map: "ix_empno_fromdate")
+  @@index([from_date], map: "ix_fromdate")
 }
 
-model UserNick {
-  firstName String
-  lastName  String
+model dept_manager {
+  dept_no   String   @db.Char(4)
+  emp_no    Int
+  from_date DateTime @db.Date
+  to_date   DateTime @db.Date
 
-  @@unique([firstName, lastName])
+  @@id([dept_no, emp_no])
+}
+
+model employees {
+  emp_no     Int              @id @default(autoincrement())
+  birth_date DateTime         @db.Date
+  first_name String           @db.VarChar(14)
+  last_name  String           @db.VarChar(16)
+  gender     employees_gender
+  hire_date  DateTime         @db.Date
+  dept_emp   dept_emp[]       @ignore
+
+  @@index([first_name], map: "ix_firstname")
+  @@index([gender, birth_date], map: "ix_gender_birthdate")
+  @@index([hire_date], map: "ix_hiredate")
+}
+
+model salaries {
+  emp_no    Int
+  salary    Int
+  from_date DateTime @db.Date
+  to_date   DateTime @db.Date
+
+  @@id([emp_no, from_date])
+  @@index([salary], map: "ix_salary")
+}
+
+model titles {
+  emp_no    Int
+  title     String    @db.VarChar(50)
+  from_date DateTime  @db.Date
+  to_date   DateTime? @db.Date
+
+  @@id([emp_no, from_date, title])
+  @@index([to_date], map: "ix_todate")
+}
+
+model user {
+  user_id    String   @id @db.VarChar(255)
+  password   String   @db.VarChar(255)
+  user_name  String   @db.VarChar(255)
+  is_enabled Int      @default(0) @db.TinyInt
+  created_at DateTime @default(now()) @db.DateTime(6)
+  updated_at DateTime @default(now()) @db.DateTime(6)
+}
+
+enum employees_comp4k_gender {
+  M
+  F
+}
+
+enum employees_comp8k_gender {
+  M
+  F
+}
+
+enum employees_gender {
+  M
+  F
 }
