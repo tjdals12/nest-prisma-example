@@ -1,25 +1,20 @@
-### Description
-
----
+## Description
 
 [Prisma](https://www.prisma.io/)
 
-### Table of Contents <!-- omit in toc -->
+## Table of Contents <!-- omit in toc -->
 
----
+-   [Setup](#setup)
+-   [Env](#env)
+-   [Prisma Schema](#prisma-schema)
+-   [CLI](#cli)
+-   [Logging](#logging)
+-   [CRUD](#crud)
+-   [Transaction](#transaction)
+-   [Computed Fields & Static Method](#computed-fields--static-methods)
+-   [Nestjs](#nestjs)
 
-- [Setup](#setup)
-- [Env](#env)
-- [Prisma Schema](#prisma-schema)
-- [CLI](#cli)
-- [Logging](#logging)
-- [CRUD](#crud)
-- [Transaction](#transaction)
-- [Computed Fields & Static Method](#computed-fields--static-methods)
-
-### Setup
-
----
+## Setup
 
 #### 1. prisma, @prisma/client를 설치한다.
 
@@ -138,18 +133,16 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 await prisma.user.create({
-  data: {
-    email: 'foo@bar.com',
-    name: 'baz',
-  },
+    data: {
+        email: 'foo@bar.com',
+        name: 'baz',
+    },
 });
 
 const users = await prisma.user.findMany();
 ```
 
-### env
-
----
+## env
 
 위와 같이 datasource에 데이터베이스에 대한 연결 정보를 하드 코딩 하는 것은 좋은 방법이 아니다. `prisma generate`와 같은 명령어를 사용할 때도 하드 코딩 되어 있다고 경고 메시지를 출력한다.
 
@@ -187,9 +180,7 @@ package.json :
 }
 ```
 
-### Prisma Schema
-
----
+## Prisma Schema
 
 #### datasource
 
@@ -253,7 +244,7 @@ model User {
 
 ##### Block Attribute (@@)
 
-- `@@map`: 기본적으로 모델명과 동일한 테이블명으로 연결되지만 다르게 설정하고 싶을 경우 테이블명을 지정할 수 있다.
+-   `@@map`: 기본적으로 모델명과 동일한 테이블명으로 연결되지만 다르게 설정하고 싶을 경우 테이블명을 지정할 수 있다.
 
 ```typescript
 model User {
@@ -264,7 +255,7 @@ model User {
 }
 ```
 
-- `@@id`: 복합키를 정의한다.
+-   `@@id`: 복합키를 정의한다.
 
 ```typescript
 model User {
@@ -280,7 +271,7 @@ model User {
 }
 ```
 
-- `@@unique`: 유니크 제약조건을 정의한다.
+-   `@@unique`: 유니크 제약조건을 정의한다.
 
 ```typescript
 model User {
@@ -297,7 +288,7 @@ model User {
 }
 ```
 
-- @@id와 @@unique로 정의한 복합키와 유니크 제약조건은 Prisma Client의 findUnique에서 접근할 수 있다.
+-   @@id와 @@unique로 정의한 복합키와 유니크 제약조건은 Prisma Client의 findUnique에서 접근할 수 있다.
 
 ```typescript
 const prisma = new PrismaClient();
@@ -317,7 +308,7 @@ await prisma.user.findUnique({
 })
 ```
 
-- `@@index`: 인덱스를 정의한다.
+-   `@@index`: 인덱스를 정의한다.
 
 ```typescript
 model Post {
@@ -329,7 +320,7 @@ model Post {
 }
 ```
 
-- `@@ignore`: Prisma Client API에서 노출되지 않도록 설정한다.
+-   `@@ignore`: Prisma Client API에서 노출되지 않도록 설정한다.
 
 ```typescript
 model Post {
@@ -342,7 +333,7 @@ model Post {
 
 ##### Field Attribute (@)
 
-- `@map`: 기본적으로 필드명과 동일한 컬럼명과 연결되지만 다르게 설정하고 싶을 경우 컬럼명을 지정할 수 있다.
+-   `@map`: 기본적으로 필드명과 동일한 컬럼명과 연결되지만 다르게 설정하고 싶을 경우 컬럼명을 지정할 수 있다.
 
 ```typescript
 model User {
@@ -351,7 +342,7 @@ model User {
 }
 ```
 
-- `@id`: 해당 필드를 Primary Key로 설정한다.
+-   `@id`: 해당 필드를 Primary Key로 설정한다.
 
 ```typescript
 model User {
@@ -359,7 +350,7 @@ model User {
 }
 ```
 
-- `@unique`: 해당 필드를 유니크로 설정한다.
+-   `@unique`: 해당 필드를 유니크로 설정한다.
 
 ```typescript
 model User {
@@ -368,7 +359,7 @@ model User {
 }
 ```
 
-- `@default`: 기본값을 설정한다.
+-   `@default`: 기본값을 설정한다.
 
 ```typescript
 model User {
@@ -377,7 +368,7 @@ model User {
 }
 ```
 
-- `@relation`: 관계 필드를 정의한다.
+-   `@relation`: 관계 필드를 정의한다.
 
 ```typescript
 model User {
@@ -392,7 +383,7 @@ model Profile {
 }
 ```
 
-- `@db`: 네이티브 타입을 설정한다. 스칼라 타입은 데이터베이스의 타입과 연결된다. 하지만 데이터베이스에서 지원하는 다른 타입과 연결할 때 사용한다. 예를 들어, String은 mysql에서 varchar(191)로 연결된다. 이를 char(50)와 연결하고 싶다고 할 때 사용할 수 있다.
+-   `@db`: 네이티브 타입을 설정한다. 스칼라 타입은 데이터베이스의 타입과 연결된다. 하지만 데이터베이스에서 지원하는 다른 타입과 연결할 때 사용한다. 예를 들어, String은 mysql에서 varchar(191)로 연결된다. 이를 char(50)와 연결하고 싶다고 할 때 사용할 수 있다.
 
 ```typescript
 model User {
@@ -401,7 +392,7 @@ model User {
 }
 ```
 
-- `@ignore`: Prisma Client API에서 노출되지 않도록 설정한다.
+-   `@ignore`: Prisma Client API에서 노출되지 않도록 설정한다.
 
 ```typescript
   model User {
@@ -410,9 +401,7 @@ model User {
   }
 ```
 
-### CLI
-
----
+## CLI
 
 #### prisma init
 
@@ -501,9 +490,7 @@ $ npx prisma migrate diff \
 $ npx prisma studio
 ```
 
-### Logging
-
----
+## Logging
 
 Prisma Client 인스턴스를 생성할 때 log 옵션을 추가한다. 로그 출력 방식에는 표준 출력과 이벤트 기반이 있다.
 
@@ -513,7 +500,7 @@ Prisma Client 인스턴스를 생성할 때 log 옵션을 추가한다. 로그 �
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient({
-  log: ['query', 'error', 'info', 'warn'],
+    log: ['query', 'error', 'info', 'warn'],
 });
 ```
 
@@ -576,18 +563,16 @@ COMMIT
 2ms
 ```
 
-### CRUD
-
----
+## CRUD
 
 #### Create
 
 ```typescript
 const user = await prisma.user.create({
-  data: {
-    email: '...',
-    name: '...',
-  },
+    data: {
+        email: '...',
+        name: '...',
+    },
 });
 ```
 
@@ -595,17 +580,17 @@ const user = await prisma.user.create({
 
 ```typescript
 const user = await prisma.user.create({
-  data: {
-    email: '...',
-    name: '...',
-    posts: {
-      create: [{ title: '...' }, { title: '...' }],
+    data: {
+        email: '...',
+        name: '...',
+        posts: {
+            create: [{ title: '...' }, { title: '...' }],
+        },
     },
-  },
-  // return with
-  include: {
-    posts: true,
-  },
+    // return with
+    include: {
+        posts: true,
+    },
 });
 ```
 
@@ -614,25 +599,25 @@ const user = await prisma.user.create({
 ```typescript
 // { count: 4 }
 const result = await prisma.user.createMany({
-  data: [
-    { email: '...', name: '...' },
-    { email: '...', name: '...' },
-    { email: '...', name: '...' },
-    { email: '...', name: '...' },
-  ],
+    data: [
+        { email: '...', name: '...' },
+        { email: '...', name: '...' },
+        { email: '...', name: '...' },
+        { email: '...', name: '...' },
+    ],
 });
 
 // PostgreSQL, CockroachDB, SQLite만 지원한다.
 const users = await prisma.user.createManyAndReturn({
-  data: [
-    { email: '...', name: '...' },
-    { email: '...', name: '...' },
-    { email: '...', name: '...' },
-    { email: '...', name: '...' },
-  ],
-  include: {
-    posts: true,
-  },
+    data: [
+        { email: '...', name: '...' },
+        { email: '...', name: '...' },
+        { email: '...', name: '...' },
+        { email: '...', name: '...' },
+    ],
+    include: {
+        posts: true,
+    },
 });
 ```
 
@@ -640,8 +625,8 @@ const users = await prisma.user.createManyAndReturn({
 
 ```typescript
 const user = await prisma.user.update({
-  where: { id: 1 },
-  data: { email: 'test@test.com' },
+    where: { id: 1 },
+    data: { email: 'test@test.com' },
 });
 ```
 
@@ -649,18 +634,18 @@ const user = await prisma.user.update({
 
 ```typescript
 const user = await prisma.user.update({
-  where: { id: 1 },
-  data: {
-    email: '...',
-    posts: {
-      update: {
-        where: { id: 10 },
-        data: {
-          title: '...',
+    where: { id: 1 },
+    data: {
+        email: '...',
+        posts: {
+            update: {
+                where: { id: 10 },
+                data: {
+                    title: '...',
+                },
+            },
         },
-      },
     },
-  },
 });
 ```
 
@@ -669,10 +654,10 @@ const user = await prisma.user.update({
 ```typescript
 // { count: 3 }
 const result = await prisma.user.updateMany({
-  where: { id: { in: [1, 2, 3] } },
-  data: {
-    isDelete: true,
-  },
+    where: { id: { in: [1, 2, 3] } },
+    data: {
+        isDelete: true,
+    },
 });
 ```
 
@@ -680,29 +665,29 @@ const result = await prisma.user.updateMany({
 
 ```typescript
 const user = await prisma.user.upsert({
-  where: { id: 1 },
-  update: {
-    email: '...',
-    posts: {
-      create: {
-        title: '...',
-      },
-      update: {
-        where: { id: 10 },
-        data: { title: '...' },
-      },
+    where: { id: 1 },
+    update: {
+        email: '...',
+        posts: {
+            create: {
+                title: '...',
+            },
+            update: {
+                where: { id: 10 },
+                data: { title: '...' },
+            },
+        },
     },
-  },
-  create: {
-    email: '...',
-    name: '...',
-    posts: {
-      create: { title: '...' },
+    create: {
+        email: '...',
+        name: '...',
+        posts: {
+            create: { title: '...' },
+        },
     },
-  },
-  include: {
-    posts: true,
-  },
+    include: {
+        posts: true,
+    },
 });
 ```
 
@@ -712,13 +697,13 @@ const user = await prisma.user.upsert({
 
 ```typescript
 const post = await prisma.post.delete({
-  where: { id: 1 },
+    where: { id: 1 },
 });
 const user = await prisma.user.delete({
-  where: { id: 1 },
-  include: {
-    posts: true,
-  },
+    where: { id: 1 },
+    include: {
+        posts: true,
+    },
 });
 ```
 
@@ -727,11 +712,11 @@ const user = await prisma.user.delete({
 ```typescript
 // { count: 3 }
 const result = await prisma.post.deleteMany({
-  where: {
-    title: {
-      contains: 'title',
+    where: {
+        title: {
+            contains: 'title',
+        },
     },
-  },
 });
 ```
 
@@ -742,12 +727,12 @@ const result = await prisma.post.deleteMany({
 ```typescript
 // null을 반환할 수 있다.
 const user = await prisma.user.findUnique({
-  where: { id: 1 },
+    where: { id: 1 },
 });
 
 // null을 반환하지 않고 에러를 발생시킨다.
 const user = await prisma.user.findUniqueOrThrow({
-  where: { id: 1 },
+    where: { id: 1 },
 });
 ```
 
@@ -756,20 +741,20 @@ const user = await prisma.user.findUniqueOrThrow({
 ```typescript
 // null을 반환할 수 있다.
 const user = await prisma.user.findFirst({
-  where: {
-    name: {
-      contains: 'test',
+    where: {
+        name: {
+            contains: 'test',
+        },
     },
-  },
 });
 
 // null을 반환하지 않고 에러를 발생시킨다.
 const user = await prisma.user.findFirstOrThrow({
-  where: {
-    name: {
-      contains: 'test',
+    where: {
+        name: {
+            contains: 'test',
+        },
     },
-  },
 });
 ```
 
@@ -778,19 +763,19 @@ const user = await prisma.user.findFirstOrThrow({
 ```typescript
 import { Prisma } from '@prisma/client';
 const user = await prisma.user.findMany({
-  where: {
-    name: {
-      not: null,
+    where: {
+        name: {
+            not: null,
+        },
     },
-  },
-  include: {
-    posts: true,
-  },
-  orderBy: {
-    name: Prisma.SortOrder.asc,
-  },
-  take: 10,
-  skip: 100,
+    include: {
+        posts: true,
+    },
+    orderBy: {
+        name: Prisma.SortOrder.asc,
+    },
+    take: 10,
+    skip: 100,
 });
 ```
 
@@ -798,15 +783,13 @@ Count
 
 ```typescript
 const count = await prisma.user.count({
-  where: {
-    name: null,
-  },
+    where: {
+        name: null,
+    },
 });
 ```
 
-### Transaction
-
----
+## Transaction
 
 #### Sequential
 
@@ -829,28 +812,26 @@ await prisma.$transaction(async (tx) => {
 });
 ```
 
-### Computed Fields & Static Methods
-
----
+## Computed Fields & Static Methods
 
 #### Computed Fields
 
 ```typescript
 const prisma = new PrismaClient().$extends({
-  result: {
-    user: {
-      fullName: {
-        needs: { firstName: true, lastName: true },
-        compute(user) {
-          return `${user.firstName} ${user.lastName}`;
+    result: {
+        user: {
+            fullName: {
+                needs: { firstName: true, lastName: true },
+                compute(user) {
+                    return `${user.firstName} ${user.lastName}`;
+                },
+            },
         },
-      },
     },
-  },
 });
 
 const user = await prisma.user.findUnique({
-  where: { id: 1 },
+    where: { id: 1 },
 });
 console.log(user.fullName);
 ```
@@ -859,19 +840,204 @@ console.log(user.fullName);
 
 ```typescript
 const prisma = new PrismaClient().$extends({
-  model: {
-    user: {
-      async signUp(email: string, name: string) {
-        return prisma.user.create({
-          data: {
-            email,
-            name,
-          },
-        });
-      },
+    model: {
+        user: {
+            async signUp(email: string, name: string) {
+                return prisma.user.create({
+                    data: {
+                        email,
+                        name,
+                    },
+                });
+            },
+        },
     },
-  },
 });
 
 const user = await prisma.user.signUp('test@test.com', 'test');
+```
+
+## Nestjs
+
+Nestjs에서 Prisma를 사용하기 위해서 Prisma Client를 상속한 Prisma Service를 만든다.
+
+example:
+
+```typescript
+// prisma.service.ts
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+
+@Injetable()
+export class PrismaService extends PrismaClient implements OnModuleInit {
+    onModuleInit() {
+        this.$connect();
+    }
+}
+
+// user.service.ts
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class UserService {
+    constructor(private prismaService: PrismaService) {}
+
+    async findOne(id: number) {
+        const user = await this.prismaService.user.findUnique({
+            where: {
+                id,
+            },
+        });
+        return user;
+    }
+}
+
+// user.module.ts
+import { Module } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+
+@Module({
+    providers: [PrismaService, UserService],
+})
+export class UserModule {}
+```
+
+하지만 $extends를 사용하려면 추가적인 설정이 필요하다. 위의 방식에서 생성자나 OnModuleInit에서 $extends를 사용할 수 있지만 타입이 제대로 적용되지 않는다.
+
+아래와 같이 Prisma Service에서 Prisma Client를 상속하는 대신 확장한 $extends가 적용된 Prisma Client를 상속하도록 한다.
+
+example:
+
+```typescript
+import { PrismaClient } from '@prisma/client';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+
+const getExtendedPrismaClient = () => {
+    const prisma = new PrismaClient().$extends({
+        result: {
+            user: {
+                fullName: {
+                    needs: { firstName: true, lastName: true },
+                    compute(user) {
+                        return `${firstName} ${lastName}`;
+                    },
+                },
+            },
+        },
+        model: {
+            user: {
+                createBy: async (args: {
+                    firstName: string;
+                    lastName: string;
+                }) => {
+                    return prisma.user.create({
+                        data: {
+                            firstName,
+                            lastName,
+                        },
+                    });
+                },
+            },
+        },
+    });
+    return prisma;
+};
+
+const ExtendedPrismaClient = class {
+    constructor {
+        return getExtendedPrismaClient();
+    }
+} as new () => ReturnType<
+    typeof getExtendedPrismaClient
+>;
+
+@Injectable()
+export class PrismaService extends ExtendedPrismaClient implements OnModuleInit {
+    onModuleInit() {
+        this.$connect();
+    }
+}
+```
+
+`getExtendedPrismaClient`에서 $extends에 많은 내용을 작성하면 코드가 길어지고 가독성이 좋지 않기 때문에 별도로 분리할 필요가 있다. 모델별로 extension을 작성하여 $extends를 체이닝 하는 방식으로 구현할 수 있다.
+
+하지만 extensions을 분리할 때 `Prisma.defineExtension`을 사용하는데 이때 주의해야 할 점이 있다. `Prisma.defineExtension`은 Prisma Client를 매개변수로 받게 되는데 이 Prisma Client는 $extends가 적용되지 않은 기본 타입이기 때문에 model 정의에서 이 Prisma Client를 사용하게 되면 result에 추가한 필드가 적용되지 않는다.
+
+```typescript
+import { Prisma } from '@prisma/client';
+
+export const employeeExtension = Prisma.defineExtension((prisma) => {
+    return prisma.$extends({
+        result: {
+            user: {
+                fullName: {
+                    needs: { firstName: true, lastName: true },
+                    compute(data) {
+                        return `${firstName} ${lastName}`;
+                    },
+                },
+            },
+        },
+        model: {
+            user: {
+                createBy: async (args: {
+                    firstName: string;
+                    lastName: string;
+                }) => {
+                    return prisma.user.create({
+                        data: {
+                            firstName,
+                            lastName,
+                        },
+                    });
+                },
+            },
+        },
+    });
+});
+
+const user = await this.prismaService.user.createBy({ firstName, lastName });
+
+// 존재하지 않는 속성이다.
+user.fullName;
+```
+
+이 문제를 해결하려면 $extends한 Prisam Client를 사용하도록 변경하고 해당 Prisma Client를 반환하도록 한다.
+
+```typescript
+import { Prisma } from '@prisma/client';
+
+export const employeeExtension = Prisma.defineExtension((prisma) => {
+    const extendedPrisma = prisma.$extends({
+        ...
+        model: {
+            user: {
+                createBy: async (args: { firstName: string, lastName: string }) => {
+                    // prisma -> extendedPrisma
+                    return extendedPrisma.user.create({
+                        data: {
+                            firstName,
+                            lastName
+                        }
+                    })
+                }
+            }
+        }
+    });
+    return extendedPrisma;
+});
+```
+
+이렇게 만든 extension을 `getExtendedPrismaClient`에 추가하면 된다.
+
+```typescript
+import { employeeExtension } from './employee.extension';
+import { departmentExtension } from './department.extension';
+
+const getExtendedPrismaClient = () => {
+    const prisma = new PrismaClient()
+        .$extends(employeeExtension)
+        .$extends(departmentExtension);
+    return prisma;
+};
 ```
